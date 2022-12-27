@@ -1,5 +1,5 @@
 import numpy as np
-from equation import Equation
+from .equation import Equation
 
 def find_equation_ids(preds):
     # Takes yolo prediction to process
