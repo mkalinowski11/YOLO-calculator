@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 
 IMG_SIZE = 512
 NMS_THRESHOLD = 0.4

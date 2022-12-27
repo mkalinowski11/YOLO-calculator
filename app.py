@@ -10,7 +10,7 @@ import numpy as np
 from equation_processing.equation import Equation
 from equation_processing.equation_processing import find_equation_ids, get_equations
 from yolo_model import Yolov5Model, IMG_SIZE
-from image_processing.image_utils import decode_image, encode_image
+from image_processing.image_utils import decode_image, encode_image, draw_equations
 #
 MODEL_PATH = 'model/best2.pt'
 yolo_model = Yolov5Model(model_path=MODEL_PATH, img_size=IMG_SIZE)
@@ -89,26 +89,26 @@ def update_images(prediction_data, uploaded_data):
     prediction_data_im = dash.no_update
     if uploaded_data is not None:
         input_data_im = image_card(uploaded_data, "Uploaded image")
+    if prediction_data is not None:
+        prediction_data_im = image_card(prediction_data, "Predicted eqs")
     return input_data_im, prediction_data_im
 
 @app.callback([Output('prediction-data', 'data'),
                Input('predict-button-state', 'n_clicks'),
                State('store-data', 'data')]
 )
-def update_output(n_clicks, data_list):
-    # if data_list is None:
-    #     return dash.no_update
-    # prediction_images = []
-    # for image in data_list:
-    #     image = decode_image(img_str = image)
-    #     opencvImage = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-    #     prediction = model.predict(image)
-    #     _, cords = get_yolo_bbox_data(prediction)
-    #     opencvImage = plot_yolo_bbox(cords, opencvImage, treshold = 0.4)
-    #     b64_string = encode_image(opencvImage)
-    #     prediction_images.append(b64_string)
-    # return prediction_images,
-    return dash.no_update
+def update_output(n_clicks, data_str):
+    if data_str is None:
+        return dash.no_update
+    image = decode_image(img_str = data_str)
+    prediction = yolo_model.predict(image)
+    eq_ids = find_equation_ids(prediction)
+    equations = get_equations(prediction, eq_ids)
+    # place to calculate results from equations
+    new_image = draw_equations(image, equations)
+    new_image = encode_image(new_image)
+    print(new_image)
+    return new_image
 
 if __name__ == '__main__':
     app.run_server(debug=True)
