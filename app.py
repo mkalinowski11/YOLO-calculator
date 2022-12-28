@@ -90,7 +90,6 @@ def update_images(prediction_data, uploaded_data):
     if uploaded_data is not None:
         input_data_im = image_card(uploaded_data, "Uploaded image")
     if prediction_data is not None:
-        print("yeee")
         prediction_data_im = image_card(prediction_data, "Predicted eqs")
     return input_data_im, prediction_data_im
 
