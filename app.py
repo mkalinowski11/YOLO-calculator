@@ -57,7 +57,7 @@ app.layout = dbc.Container(
             dbc.Row(
                 [
                     *[dbc.Col(html.Div(id=img_id)) for img_id in ["original-img","prediction-image"]],
-                    html.Button(id='predict-button-state', n_clicks=0, children='Predict')
+                    html.Button(id='predict-button-state', n_clicks=0, children='Calculate!')
                 ]
             )
         ),
@@ -81,7 +81,7 @@ def upload_data(input_data):
     return input_data,
 
 @app.callback([Output("original-img", "children"), Output('prediction-image', 'children'),
-               State('prediction-data', 'data'),
+               Input('prediction-data', 'data'),
                Input("img-upload", "contents")]
 )
 def update_images(prediction_data, uploaded_data):
@@ -90,6 +90,7 @@ def update_images(prediction_data, uploaded_data):
     if uploaded_data is not None:
         input_data_im = image_card(uploaded_data, "Uploaded image")
     if prediction_data is not None:
+        print("yeee")
         prediction_data_im = image_card(prediction_data, "Predicted eqs")
     return input_data_im, prediction_data_im
 
@@ -107,8 +108,7 @@ def update_output(n_clicks, data_str):
     # place to calculate results from equations
     new_image = draw_equations(image, equations)
     new_image = encode_image(new_image)
-    print(new_image)
-    return new_image
+    return new_image,
 
 if __name__ == '__main__':
     app.run_server(debug=True)

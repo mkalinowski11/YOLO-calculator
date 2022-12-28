@@ -39,6 +39,7 @@ def draw_equations(image, equations_list):
     img = image.copy()
     drw = ImageDraw.Draw(img)
     for equation in equations_list:
+        drw.rectangle([(equation.eq_coord[1], equation.eq_coord[2]), (equation.eq_coord[3], equation.eq_coord[4])], outline="red")
         for entry in equation():
             drw.rectangle([(entry[1], entry[2]), (entry[3], entry[4])], outline="blue")
     return img
