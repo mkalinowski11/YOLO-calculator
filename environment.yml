@@ -40,3 +40,4 @@ dependencies:
     - psutil==5.9.1
     - pyyaml
     - scipy==1.4.1
+    - sympy

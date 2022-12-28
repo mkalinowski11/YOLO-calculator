@@ -1,9 +1,18 @@
 import numpy as np
+import sympy
+
+LABELS_DECODED = {
+                  0 : "0", 1 : "1", 2 : "2", 3 : "3",
+                  4 : "4", 5 : "5", 6 : "6", 7 : "7",
+                  8 : "8", 9 : "9", 10 : "=", 11 : "/",
+                  12 : "equation", 13 : "-", 14 : "*", 15 : "+"
+                }
 
 class Equation:
   def __init__(self, idx, prediction):
     self.eq_coord = prediction[idx]
     self.elements = self.__get_elements(prediction, idx)
+    self.result = self.get_result()
   
   def __get_elements(self, prediction, eq_idx):
     results = []
@@ -54,3 +63,15 @@ class Equation:
   def sort_items(self, elements):
     sorted_items = sorted(elements, key = lambda entry : entry[1])
     return np.array(sorted_items)
+  
+  def get_result(self):
+    labels = self.elements[:, 0]
+    eq_string = ""
+    for label in labels:
+      eq_string += LABELS_DECODED[label]
+    eq_string = eq_string.replace("=","")
+    try:
+      result = int(sympy.sympify(eq_string))
+    except Exception:
+      result = None
+    return eq_string, result
