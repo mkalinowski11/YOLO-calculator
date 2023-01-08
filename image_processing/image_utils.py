@@ -1,8 +1,9 @@
 import numpy as np
 import base64
 from io import BytesIO
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw,ImageFont
 import cv2
+import sympy
 
 def decode_image(img_str):
     """Decodes an image from a b64 image string.
@@ -38,8 +39,18 @@ def encode_image(image):
 def draw_equations(image, equations_list):
     img = image.copy()
     drw = ImageDraw.Draw(img)
+
     for equation in equations_list:
+        print(equation)
+        print("result is:", equation.result[0], equation.result[1])
         drw.rectangle([(equation.eq_coord[1], equation.eq_coord[2]), (equation.eq_coord[3], equation.eq_coord[4])], outline="red")
+        X_result=equation.eq_coord[3] +20
+        Y_result=abs((equation.eq_coord[2] - equation.eq_coord[4])/2)
+        Y_result=max(equation.eq_coord[2], equation.eq_coord[4])-Y_result
+
+        font = ImageFont.truetype("arial.ttf", 26)
+        drw.text((X_result, Y_result), str(equation.result[1]), font=font, fill ="black", align ="left")
+
         for entry in equation():
             drw.rectangle([(entry[1], entry[2]), (entry[3], entry[4])], outline="blue")
     return img
