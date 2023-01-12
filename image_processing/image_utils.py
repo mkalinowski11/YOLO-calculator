@@ -15,7 +15,8 @@ def decode_image(img_str):
     decoded = base64.b64decode(img_str.split("base64,")[-1])
     image = Image.open(BytesIO(decoded))
     image = image.convert('RGB')
-
+    newsize = (512, 512)
+    image = image.resize(newsize)
     return image
 
 
