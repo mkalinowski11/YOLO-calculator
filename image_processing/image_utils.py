@@ -34,6 +34,9 @@ def encode_image(image):
     return b64_string
 
 def draw_equations(image, equations_list):
+    """
+        drawing equation elements and results on image
+    """
     img = image.copy()
     drw = ImageDraw.Draw(img)
 
@@ -41,7 +44,7 @@ def draw_equations(image, equations_list):
         print(equation)
         print("result is:", equation.result[0], equation.result[1])
         drw.rectangle([(equation.eq_coord[1], equation.eq_coord[2]), (equation.eq_coord[3], equation.eq_coord[4])], outline="red")
-        X_result=equation.eq_coord[3] +10
+        X_result=equation.eq_coord[3] + 10
         Y_result=abs((equation.eq_coord[2] - equation.eq_coord[4])/2)
         Y_result=max(equation.eq_coord[2], equation.eq_coord[4])-Y_result-5
 

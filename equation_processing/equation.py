@@ -17,6 +17,8 @@ class Equation:
     self.result = self.get_result()
   
   def __get_elements(self, prediction, eq_idx):
+    # extracts elements from prediction into list
+    # that belong to specified equation by eq_idx
     results = []
     for idx, entry in enumerate(prediction):
       if idx != eq_idx:
@@ -35,6 +37,7 @@ class Equation:
     return len(self.elements)
   
   def __remove_doubles(self, elements):
+    # removes doubled object in list
     boxes = []
     for box in elements:
       intersection = 0
@@ -51,6 +54,7 @@ class Equation:
     return x * y
 
   def intersect(self, box1, box2):
+      # calculates intersection between 2 bboxs
       x1 = max(box1[1], box2[1])
       y1 = max(box1[2], box2[2])
       x2 = min(box1[3], box2[3])
@@ -68,6 +72,7 @@ class Equation:
     return np.array(sorted_items)
   
   def get_result(self):
+    # converts extracted equation elements into string
     labels = self.elements[:, 0]
     eq_string = ""
     for label in labels:
