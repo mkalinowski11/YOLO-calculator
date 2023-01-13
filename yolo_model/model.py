@@ -32,6 +32,7 @@ class Yolov5Model:
         return prediction
     
     def convert_bboxs(self, cords):
+      # converts yolo style bbox to object coordinates on image
       new_cords = torch.zeros(cords.shape)
       for idx, entry in enumerate(cords):
         new_cords[idx, :4] = entry[:4] * self.img_size
@@ -39,6 +40,7 @@ class Yolov5Model:
       return new_cords
 
     def merge_prediction(self, labels, coords):
+      # merging labels and coords into numpy ndarray
       entries = np.zeros((coords.shape[0], 6))
       for idx, (label, coord) in enumerate(zip(labels, coords)):
         entries[idx, 0] = label
@@ -46,5 +48,6 @@ class Yolov5Model:
       return entries
 
     def __get_bbox_data(self, prediction):
+        # converts yolov5 prediction to labels and bbox coords
         labels, cords = prediction.xyxyn[0][:, -1], prediction.xyxyn[0][:, :-1]
         return labels, cords
